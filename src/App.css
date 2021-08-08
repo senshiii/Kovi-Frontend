@@ -1,0 +1,98 @@
+.Chat-Area-Wrapper {
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Chat-Area {
+  width: 45%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.Chat-Navbar {
+  position: relative !important;
+  height: 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.Chat-Window {
+  width: 100%;
+  height: 92%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.Chat-Message-List {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: #fff;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.Chat-Input {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  background: #fff;
+}
+
+.Chat-Message {
+  margin: 0.65rem;
+}
+
+._404 {
+  background: rgb(181, 212, 228);
+}
+
+/* InfoCenter Animation Classes */
+
+.ic-enter{
+  transform: scaleX(0.5);
+  opacity: 0;
+}
+
+.ic-enter-active{
+  transform: scaleX(1);
+  opacity: 1;
+  transition: transform opacity 2s ease-in-out;  
+}
+
+.ic-enter-done{
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.p-canvas, .p-container{
+  background: #1d1d1d; 
+  max-height: 100vh;
+}
+
+.p-container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: -1;
+}
+
+
+
