@@ -3,34 +3,49 @@ import { createContext, useState } from "react";
 export const InfoContext = createContext({
   icMsg: null,
   show: false,
-  hasNews: false,
   news: [],
+  hasNews: false,
   hasStats: false,
+  hasResources: false,
   stats: {},
-  setIcMsg: () => {},
-  setHasNews: () => {},
-  setNews: () => {},
   setShow: () => {},
-  setHasStats: () => {},
-  setStats: () => {},
   reset: () => {},
+  loadData: () => {}
 });
 
 const InfoContextProvider = ({ children }) => {
-  const [show, setShow] = useState(false);
+  const [hasResources, setHasResources] = useState(true);
+  const [show, setShow] = useState(true);
   const [icMsg, setIcMsg] = useState(null);
   const [hasNews, setHasNews] = useState(false);
   const [news, setNews] = useState([]);
-  const [hasStats, setHasStats] = useState(false);
+  const [hasStats, setHasStats] = useState(true);
   const [stats, setStats] = useState(null);
 
   const reset = () => {
-    setShow(_ => false);
+    setShow((_) => false);
     setHasNews(false);
     setHasStats(false);
     setIcMsg(null);
     setNews([]);
     setStats(null);
+  };
+
+  const loadData = (data) => {
+    console.log("Loading Data = ", data);
+    setIcMsg(data);
+    setShow(true);
+    if (data?.response?.hasResources) {
+      setHasResources(true);
+      if (data?.response?.resources?.hasNews) {
+        setHasNews(true);
+        setNews(data?.response?.resources?.news?.articles);
+      }
+      if (data?.response?.resources?.hasStats) {
+        setHasStats(true);
+        setStats(data?.response?.resources?.stats);
+      }
+    }
   };
 
   return (
@@ -42,13 +57,10 @@ const InfoContextProvider = ({ children }) => {
         stats,
         hasNews,
         hasStats,
+        hasResources,
         reset,
-        setNews,
         setShow,
-        setStats,
-        setIcMsg,
-        setHasNews,
-        setHasStats,
+        loadData,
       }}
     >
       {children}

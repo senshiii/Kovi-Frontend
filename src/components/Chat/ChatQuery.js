@@ -4,13 +4,12 @@ import { Alert } from "@material-ui/lab";
 import { useCallback, useContext } from "react";
 
 const ChatQuery = ({ msg }) => {
-  const { icMsg, setIcMsg, setNews, setShow } = useContext(InfoContext);
+  const { icMsg, setShow, loadData } = useContext(InfoContext);
 
   const setInfoData = useCallback(() => {
-    setShow(true)
-    setIcMsg(msg);
-    setNews(msg.response.resources.news?.articles);
-  }, [msg, setIcMsg, setNews, setShow]);
+    setShow(true);
+    loadData(msg);
+  }, [msg, setShow, loadData]);
 
   return (
     <>
@@ -27,11 +26,17 @@ const ChatQuery = ({ msg }) => {
       )}
       {msg?.response?.hasResources && (
         <Alert severity="success">
-          This Response has additional resources.&nbsp;
+          This Message has additional resources.&nbsp;
           <span
-            style={{ fontWeight: "bold", textDecoration: "underline", cursor: "pointer" }}
+            style={{
+              fontWeight: "bold",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
             onClick={setInfoData}
-          >Click to Check</span>
+          >
+            Check
+          </span>
         </Alert>
       )}
     </>

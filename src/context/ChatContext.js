@@ -26,16 +26,14 @@ const ChatContextProvider = ({ children }) => {
   const [pusherSet, setPusherSet] = useState(false);
   const { sessionId, inSession } = useContext(SessionContext);
   const [pusherChannel, setPusherChannel] = useState(null);
-  const { setIcMsg, setNews, setShow } = useContext(InfoContext);
+  const { setShow, loadData } = useContext(InfoContext);
 
   const loadMessages = useCallback(async () => {
-    console.log("Loading Messages");
     setLoading(true);
     try {
       const res = await axiosInstance.get(
         "/session/thread?sessionId=" + sessionId
       );
-      console.log("Messages Loaded", res.data);
       const msgs = res.data.messages;
       setLoading(false);
       setMessages(msgs);
@@ -52,7 +50,6 @@ const ChatContextProvider = ({ children }) => {
           message,
         });
         const data = res.data;
-        console.log("Create Query Response: ", data);
         setMessages([...messages, data]);
       } catch (err) {
         console.log("Error while Sending Message", err);
@@ -64,7 +61,6 @@ const ChatContextProvider = ({ children }) => {
   // USE EFFECT TO INITIALIZE PUSHER CLIENT WHEN SESSION IS AVAILABLE
   useEffect(() => {
     if (inSession && !pusherSet) {
-      console.log("Setting Up Pusher");
       let pusher = new Pusher("d928bbd35de9450c199a", {
         cluster: "ap2",
       });
@@ -84,30 +80,28 @@ const ChatContextProvider = ({ children }) => {
   // LOG CHANGES IN MESSAGES
   // REBIND THE PUSHER CHANNEL TO EVENT ON CHANGE IN MESSAGES
   useEffect(() => {
-    console.log("[ChatContext : useEffect] Updated Messages = ", messages);
     if (pusherChannel && pusherChannel.bind) {
-      console.log("[ChatContext : useEffect] Rebinding Channel");
+
+      // Unbind Channel from Event
       pusherChannel.unbind("ON_DATA");
+
+      // Bind Channel to Event
       pusherChannel.bind("ON_DATA", (pusherData) => {
-        console.log();
         console.log("[Pusher Callback] Pusher Data: ", pusherData);
-        console.log("[Pusher Callback] Initial Messages : ", messages);
+
+        // Updating Message
         const updatedMsgList = messages.map((msg) =>
           msg.id === pusherData.id ? pusherData : msg
         );
-        setIcMsg(pusherData);
-        if (
-          pusherData?.response?.hasResources &&
-          pusherData?.response?.resources?.hasNews
-        ) {
-          setNews(pusherData.response.resources.news.articles);
-        }
-        setShow(true);
-        console.log();
+
+        // Setting Message as the recent Info Context Message
+        loadData(pusherData);
+
+        // Updating the Message List
         setMessages(updatedMsgList);
       });
     }
-  }, [messages, pusherChannel, setNews, setIcMsg, setShow]);
+  }, [messages, pusherChannel, loadData, setShow]);
 
   return (
     <ChatContext.Provider

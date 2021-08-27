@@ -1,49 +1,28 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { SentimentDissatisfiedSharp } from "@material-ui/icons";
 import { useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 import { InfoContext } from "../../context/InfoContext";
-import NewsList from "./News/NewsList";
 import InfoCenterMessage from "./InfoCenterMessage";
 import InfoCenterHeader from "./InfoCenterHeader";
+import InfoCenterResources from "./InfoCenterResources";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   infoCenter: {
     width: "30%",
     height: "90%",
     marginLeft: "2.5%",
-    background: "#ccc",
+    background: "#fff",
     borderRadius: "4px",
     overflow: "hidden",
     overflowY: "auto",
   },
-  newsListContainer: {
-    height: "auto",
-    width: "100%",
-    background: "#fff",
-    padding: "10px",
-  },
-  sectionHead: {
-    padding: "10px",
-    background: theme.palette.primary.dark,
-    color: theme.palette.common.white,
-    borderRadius: 4,
-  },
-  noRes: {
-    height: "72%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    background: "#fff",
-    padding: "0 2rem",
-    textAlign: "center",
-  },
-}));
+});
 
 const InfoCenter = () => {
-  const { icMsg, show } = useContext(InfoContext);
+  const { show, hasStats, stats, hasNews, news, hasResources } = useContext(
+    InfoContext
+  );
   const classes = useStyles();
   return (
     <CSSTransition
@@ -61,22 +40,13 @@ const InfoCenter = () => {
         {/* Info Center Message */}
         <InfoCenterMessage />
         {/* Info Center Resources */}
-        {icMsg?.response?.hasResources ? (
-          <Box className={classes.newsListContainer}>
-            <NewsList />
-          </Box>
-        ) : (
-          <Box component="div" className={classes.noRes}>
-            <SentimentDissatisfiedSharp fontSize="large" />
-            <Typography
-              variant="body1"
-              color="primary"
-              style={{ marginTop: "10px" }}
-            >
-              This Message does not have any additional Resources
-            </Typography>
-          </Box>
-        )}
+        <InfoCenterResources
+          hasStats={hasStats}
+          stats={stats}
+          hasNews={hasNews}
+          news={news}
+          hasResources={hasResources}
+        />
       </Box>
     </CSSTransition>
   );
