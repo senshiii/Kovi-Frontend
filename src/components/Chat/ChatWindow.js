@@ -1,21 +1,49 @@
 import { Box, CircularProgress, Typography } from "@material-ui/core";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { ChatContext } from "../../context/ChatContext";
 import ChatInput from "./ChatInput";
 import ChatList from "./ChatList";
 
+const useStyles = makeStyles({
+  ChatMessageList: {
+    width: "100%",
+    height: "100%",
+    maxHeight: "100%",
+    overflowY: "scroll",
+    overflowX: "hidden",
+    background: "#fff",
+    padding: "0.5rem",
+    marginBottom: ".75rem",
+  },
+  ChatWindow: {
+    width: "100%",
+    height: "92%",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flexDirection: "column",
+  },
+});
+
 const ChatWindow = (props) => {
-  const chatListRef = useRef();
+  const classes = useStyles();
+
   const { loading, messages } = useContext(ChatContext);
+  const [cref, setCref] = useState(null);
+
+  const chatRef = x => {
+    if(x) setCref(x);
+  }
 
   useEffect(() => {
-    if (chatListRef.current)
-      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
-  }, [chatListRef]);
-
-  useEffect(() => {
-    chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
-  }, [messages]);
+    if(cref){
+      console.log("Scrolling");
+      console.log(cref.scrollHeight);
+      console.log(cref.scrollTop);
+      cref.scrollTop = cref.scrollHeight;
+    }
+  }, [messages, cref]);
 
   const LoadingView = (
     <Box
@@ -35,8 +63,8 @@ const ChatWindow = (props) => {
   );
 
   return (
-    <Box className="Chat-Window">
-      <Box className="Chat-Message-List" ref={chatListRef}>
+    <Box className={classes.ChatWindow}>
+      <Box className={classes.ChatMessageList} ref={chatRef}>
         {loading ? LoadingView : <ChatList />}
       </Box>
       <ChatInput sendMessage={props.sendMessage} loading={props.loading} />

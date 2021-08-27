@@ -33,16 +33,18 @@ const InfoCenterResources = ({
 
   return hasResources ? (
     <Box className={classes.resWrapper}>
-      <Tabs
-        indicatorColor="primary"
-        textColor="primary"
-        value={tabIndex}
-        onChange={(_, index) => setTabIndex(index)}
-        variant="fullWidth"
-      >
-        <Tab label="News" />
-        <Tab label="Stats" />
-      </Tabs>
+      {hasResources && (
+        <Tabs
+          indicatorColor="primary"
+          textColor="primary"
+          value={tabIndex}
+          onChange={(_, index) => setTabIndex(index)}
+          variant="fullWidth"
+        >
+          {hasNews && <Tab label="News" />}
+          {hasStats && <Tab label="Stats" />}
+        </Tabs>
+      )}
       {tabIndex === 0 && <InfoCenterNews hasNews={hasNews} news={news} />}
       {tabIndex === 1 && <InfoCenterStats hasStats={hasStats} stats={stats} />}
     </Box>

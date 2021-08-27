@@ -15,7 +15,7 @@ export const InfoContext = createContext({
 
 const InfoContextProvider = ({ children }) => {
   const [hasResources, setHasResources] = useState(true);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [icMsg, setIcMsg] = useState(null);
   const [hasNews, setHasNews] = useState(false);
   const [news, setNews] = useState([]);

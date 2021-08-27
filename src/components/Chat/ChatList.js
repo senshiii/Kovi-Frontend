@@ -14,8 +14,13 @@ const ChatList = () => {
         msg={{ text: "Hello from Kovi", createdAt: new Date() }}
       />
       {loaded &&
-        messages.map((msg) => (
-          <ChatQuery key={msg.id} msg={msg} onClick={() => loadData(msg)} />
+        messages.map((msg, index, array) => (
+          <ChatQuery
+            key={msg.id}
+            msg={msg}
+            onClick={() => loadData(msg)}
+            showSuggestions={index === array.length - 1}
+          />
         ))}
     </Fragment>
   );

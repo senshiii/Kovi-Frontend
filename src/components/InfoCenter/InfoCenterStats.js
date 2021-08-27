@@ -6,7 +6,7 @@ const useStyles = makeStyles({
   header: {
     width: "75%",
     margin: "0 auto",
-    padding: ".5rem",
+    padding: ".5rem 0",
     borderBottom: "1px solid #000",
     // background: "rgb(187, 234, 255)",
   },
@@ -30,11 +30,11 @@ const InfoCenterStats = ({ hasStats, stats }) => {
 
   return (
     <Box className={classes.stats}>
-      <Box className={classes.header}>
+      {/* <Box className={classes.header}>
         <Typography variant="h6">Six Months Report</Typography>
-      </Box>
+      </Box> */}
       <Box className={classes.header}>
-        <Typography variant="h6">World Covid Count</Typography>
+        <Typography variant="h6">Covid Statistics - World</Typography>
       </Box>
       <Box className={classes.chart}>
         {stats && (
@@ -45,9 +45,9 @@ const InfoCenterStats = ({ hasStats, stats }) => {
                 {
                   label: "World Covid Statistics",
                   data: [
-                    stats.TotalCases,
-                    stats.TotalRecovered,
-                    stats.TotalDeaths,
+                    stats.totalCases || stats.TotalCases,
+                    stats.TotalRecovered || stats.totalRecovered,
+                    stats.TotalDeaths || stats.totalDeaths,
                   ],
                   backgroundColor: [
                     "rgb(255, 206, 86)",

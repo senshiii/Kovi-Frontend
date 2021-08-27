@@ -9,7 +9,6 @@ import Pusher from "pusher-js";
 import axiosInstance from "../axios";
 import { SessionContext } from "./SessionContext";
 import { InfoContext } from "./InfoContext";
-import { SettingsPhoneTwoTone } from "@material-ui/icons";
 
 export const ChatContext = createContext({
   messages: [],
@@ -50,6 +49,7 @@ const ChatContextProvider = ({ children }) => {
           message,
         });
         const data = res.data;
+        console.log("New Message Res = ", data);
         setMessages([...messages, data]);
       } catch (err) {
         console.log("Error while Sending Message", err);
