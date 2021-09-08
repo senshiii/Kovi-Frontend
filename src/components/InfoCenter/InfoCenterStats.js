@@ -34,7 +34,7 @@ const InfoCenterStats = ({ hasStats, stats }) => {
         <Typography variant="h6">Six Months Report</Typography>
       </Box> */}
       <Box className={classes.header}>
-        <Typography variant="h6">Covid Statistics - World</Typography>
+        <Typography variant="h6">Covid Statistics - {stats?.country || ""}</Typography>
       </Box>
       <Box className={classes.chart}>
         {stats && (

@@ -34,18 +34,26 @@ const InfoContextProvider = ({ children }) => {
   const loadData = (data) => {
     console.log("Loading Data = ", data);
     setIcMsg(data);
-    setShow(true);
     if (data?.response?.hasResources) {
       setHasResources(true);
       if (data?.response?.resources?.hasNews) {
         setHasNews(true);
         setNews(data?.response?.resources?.news?.articles);
+      }else{
+        setHasNews(false)
+        setNews(null);
       }
       if (data?.response?.resources?.hasStats) {
         setHasStats(true);
         setStats(data?.response?.resources?.stats);
+      }else{
+        setHasStats(false)
+        setStats(null)
       }
+    }else{
+      setHasResources(false)
     }
+    if(hasResources) setShow(true);
   };
 
   return (

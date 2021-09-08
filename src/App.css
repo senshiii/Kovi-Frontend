@@ -33,6 +33,9 @@
   justify-content: center;
   align-items: center;
   padding: 0.5rem 0.85rem;
+  background: rgb(179, 218, 233);
+  background: rgb(184, 217, 255);
+  background: rgb(255, 234, 217);
   background: #fff;
 }
 

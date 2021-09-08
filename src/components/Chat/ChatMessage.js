@@ -3,12 +3,17 @@ import {
   Card,
   CardContent,
   CardHeader,
+  IconButton,
   Typography,
+  Tooltip,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Fragment } from "react";
+import { StopSharp, VolumeUpSharp } from "@material-ui/icons";
+import { Fragment, useCallback, useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
+const speechSynthesis = window.speechSynthesis;
+
+const useStyles = makeStyles({
   suggestionChip: {
     margin: "3px 0",
     padding: "4px 5px",
@@ -22,31 +27,74 @@ const useStyles = makeStyles((theme) => ({
   ChatMessage: {
     width: "60%",
     maxWidth: "60%",
-    margin: "1rem 0",
-    cursor: "pointer"
+    margin: "5px 0 1rem 0",
+    cursor: "pointer",
+    background: "rgb(179, 218, 233)",
+    paddingTop: "1rem",
+    paddingBottom: 0,
   },
-  selected: {
-    background: theme.palette.info.dark
-  }
-}));
+});
 
-const ChatMessage = ({ isUser, username, msg, selected, onClick }) => {
+const ChatMessage = ({ isUser, username, msg, isReadable, onClick }) => {
   const classes = useStyles();
+
+  const [speechInProgress, setSpeechInProgress] = useState(false);
+
+  const stopTalking = () => {
+    speechSynthesis.cancel();
+    setSpeechInProgress(false);
+  };
+
+  const talk = useCallback(() => {
+    try {
+      const speechUtter = new SpeechSynthesisUtterance(msg?.text);
+      speechUtter.onend = () => setSpeechInProgress(false);
+      speechSynthesis.speak(speechUtter);
+      setSpeechInProgress(true);
+    } catch (err) {}
+  }, [msg?.text]);
+
   return (
     <Fragment>
       <Card
         style={{ marginLeft: isUser ? "40%" : 0 }}
         color="primary"
-        className={[classes.ChatMessage, selected ? classes.selected : ""].join(
-          " "
-        )}
+        className={classes.ChatMessage}
         onClick={onClick}
       >
         <CardHeader
           title={username}
           subheader={new Date(msg?.createdAt).toDateString()}
-          avatar={<Avatar >{username?.charAt(0)?.toUpperCase()}</Avatar>}
+          avatar={
+            <Avatar style={{ background: "orange" }}>
+              {username?.charAt(0)?.toUpperCase()}
+            </Avatar>
+          }
           style={{ padding: "7px 10px" }}
+          action={
+            <Tooltip
+              title={speechInProgress ? "Stop Reading" : "Read Message"}
+              placement="right"
+            >
+              {speechInProgress ? (
+                <IconButton
+                  style={{ display: isReadable ? "block" : "none" }}
+                  color="primary"
+                  onClick={stopTalking}
+                >
+                  <StopSharp style={{ color: "red" }} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  style={{ display: isReadable ? "block" : "none" }}
+                  color="primary"
+                  onClick={talk}
+                >
+                  <VolumeUpSharp />
+                </IconButton>
+              )}
+            </Tooltip>
+          }
         />
         <CardContent>
           <Typography variant="body2">{msg?.text}</Typography>

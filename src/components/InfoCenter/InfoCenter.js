@@ -27,9 +27,9 @@ const InfoCenter = () => {
   return (
     <CSSTransition
       unmountOnExit
-      onEnter={(data) => console.log("On Enter", data)}
-      onEntering={(data) => console.log("On Entering", data)}
-      onEntered={(data) => console.log("On Entered", data)}
+      // onEnter={(data) => console.log("On Enter", data)}
+      // onEntering={(data) => console.log("On Entering", data)}
+      // onEntered={(data) => console.log("On Entered", data)}
       in={show}
       classNames="ic"
       timeout={500}

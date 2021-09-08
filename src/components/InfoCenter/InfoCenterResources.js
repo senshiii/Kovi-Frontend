@@ -46,7 +46,7 @@ const InfoCenterResources = ({
         </Tabs>
       )}
       {tabIndex === 0 && <InfoCenterNews hasNews={hasNews} news={news} />}
-      {tabIndex === 1 && <InfoCenterStats hasStats={hasStats} stats={stats} />}
+      {(tabIndex === 1 || (!hasNews && tabIndex === 0)) && <InfoCenterStats hasStats={hasStats} stats={stats} />}
     </Box>
   ) : (
     <Box component="div" className={classes.noRes}>

@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography } from "@material-ui/core";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ChatContext } from "../../context/ChatContext";
 import ChatInput from "./ChatInput";
@@ -38,9 +38,9 @@ const ChatWindow = (props) => {
 
   useEffect(() => {
     if(cref){
-      console.log("Scrolling");
-      console.log(cref.scrollHeight);
-      console.log(cref.scrollTop);
+      // console.log("Scrolling");
+      // console.log(cref.scrollHeight);
+      // console.log(cref.scrollTop);
       cref.scrollTop = cref.scrollHeight;
     }
   }, [messages, cref]);

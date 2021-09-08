@@ -25,7 +25,7 @@ const ChatContextProvider = ({ children }) => {
   const [pusherSet, setPusherSet] = useState(false);
   const { sessionId, inSession } = useContext(SessionContext);
   const [pusherChannel, setPusherChannel] = useState(null);
-  const { setShow, loadData } = useContext(InfoContext);
+  const { loadData } = useContext(InfoContext);
 
   const loadMessages = useCallback(async () => {
     setLoading(true);
@@ -51,11 +51,12 @@ const ChatContextProvider = ({ children }) => {
         const data = res.data;
         console.log("New Message Res = ", data);
         setMessages([...messages, data]);
+        loadData(data);
       } catch (err) {
         console.log("Error while Sending Message", err);
       }
     },
-    [sessionId, messages]
+    [sessionId, messages, loadData]
   );
 
   // USE EFFECT TO INITIALIZE PUSHER CLIENT WHEN SESSION IS AVAILABLE
@@ -64,11 +65,11 @@ const ChatContextProvider = ({ children }) => {
       let pusher = new Pusher("d928bbd35de9450c199a", {
         cluster: "ap2",
       });
-      const channel = pusher.subscribe("INTENT_DATA_CHANNEL");
+      const channel = pusher.subscribe(sessionId+"-DATA");
       setPusherChannel(channel);
       setPusherSet(true);
     }
-  }, [inSession, pusherSet, messages]);
+  }, [inSession, pusherSet, messages, sessionId]);
 
   // USE EFFECT TO LOAD MESSAGES WHEN SESSION IS AVAILABLE
   useEffect(() => {
@@ -81,7 +82,6 @@ const ChatContextProvider = ({ children }) => {
   // REBIND THE PUSHER CHANNEL TO EVENT ON CHANGE IN MESSAGES
   useEffect(() => {
     if (pusherChannel && pusherChannel.bind) {
-
       // Unbind Channel from Event
       pusherChannel.unbind("ON_DATA");
 
@@ -101,7 +101,7 @@ const ChatContextProvider = ({ children }) => {
         setMessages(updatedMsgList);
       });
     }
-  }, [messages, pusherChannel, loadData, setShow]);
+  }, [messages, pusherChannel, loadData]);
 
   return (
     <ChatContext.Provider
